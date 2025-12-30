@@ -15,7 +15,7 @@ abstract contract BaseLightAccountFactory is Ownable2Step {
     error TransferFailed();
     error ZeroAddressNotAllowed();
 
-    mapping (uint => address) public erc20PaymentToken;
+    address public erc20PaymentToken;
     address public paymasterAddress;
 
     /// @notice Allow contract to receive native currency.
@@ -25,8 +25,8 @@ abstract contract BaseLightAccountFactory is Ownable2Step {
     /// @notice Set the ERC20 token to be used for payment.
     /// @dev Only callable by owner.
     /// @param token The address of the ERC20 token.
-    function setERC20PaymentToken(uint index, address token) external onlyOwner {
-        erc20PaymentToken[index] = token;
+    function setERC20PaymentToken(address token) external onlyOwner {
+        erc20PaymentToken = token;
     }
 
     /// @notice Set the paymaster address.

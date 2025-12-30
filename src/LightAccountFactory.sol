@@ -18,7 +18,7 @@ contract LightAccountFactory is BaseLightAccountFactory {
     constructor(address owner, IEntryPoint entryPoint, address erc20Payment, address paymaster) Ownable(owner) {
         _verifyEntryPointAddress(address(entryPoint));
         ACCOUNT_IMPLEMENTATION = new LightAccount(entryPoint);
-        erc20PaymentToken[0] = erc20Payment;
+        erc20PaymentToken = erc20Payment;
         paymasterAddress = paymaster;
         ENTRY_POINT = entryPoint;
     }
@@ -29,7 +29,6 @@ contract LightAccountFactory is BaseLightAccountFactory {
     /// creation.
     /// @param owner The owner of the account to be created.
     /// @param salt A salt, which can be changed to create multiple accounts with the same owner.
-    /// The lowest 16 bits of the salt are used to select the ERC20 payment token index.
     /// @return account The address of either the newly deployed account or an existing account with this owner and salt.
     function createAccount(address owner, uint256 salt) external returns (LightAccount account) {
         (bool alreadyDeployed, address accountAddress) =
@@ -38,9 +37,7 @@ contract LightAccountFactory is BaseLightAccountFactory {
         account = LightAccount(payable(accountAddress));
 
         if (!alreadyDeployed) {
-             // index is stored in the lowest 16 bits of salt
-            uint index = uint16(salt);
-            account.initialize(owner, erc20PaymentToken[index], paymasterAddress);
+            account.initialize(owner, erc20PaymentToken, paymasterAddress);
         }
     }
 
