@@ -29,6 +29,7 @@ contract LightAccountFactory is BaseLightAccountFactory {
     /// creation.
     /// @param owner The owner of the account to be created.
     /// @param salt A salt, which can be changed to create multiple accounts with the same owner.
+    /// The 160 lower bits of the salt are used to pass in a sub-account address.
     /// @return account The address of either the newly deployed account or an existing account with this owner and salt.
     function createAccount(address owner, uint256 salt) external returns (LightAccount account) {
         (bool alreadyDeployed, address accountAddress) =
@@ -37,7 +38,8 @@ contract LightAccountFactory is BaseLightAccountFactory {
         account = LightAccount(payable(accountAddress));
 
         if (!alreadyDeployed) {
-            account.initialize(owner, erc20PaymentToken, paymasterAddress);
+            address subAccount = address(uint160(salt));
+            account.initialize(owner, erc20PaymentToken, paymasterAddress, subAccount);
         }
     }
 

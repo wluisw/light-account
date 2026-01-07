@@ -45,6 +45,8 @@ contract LightAccount is BaseLightAccount, CustomSlotInitializable {
     /// @dev keccak256(abi.encode(uint256(keccak256("light_account_v1.initializable")) - 1)) & ~bytes32(uint256(0xff));
     bytes32 internal constant _INITIALIZABLE_STORAGE_POSITION =
         0x33e4b41198cc5b8053630ed667ea7c0c4c873f7fc8d9a478b5d7259cec0a4a00;
+    
+    address public subAccount;
 
     struct LightAccountStorage {
         address owner;
@@ -76,11 +78,14 @@ contract LightAccount is BaseLightAccount, CustomSlotInitializable {
     /// must be called to upgrade the implementation.
     /// @param owner_ The initial owner of the account.
     /// @param erc20PaymentToken The ERC20 token to be used for payment.
-    function initialize(address owner_, address erc20PaymentToken_, address paymasterAddress_) external virtual initializer {
+    /// @param paymasterAddress The address of the paymaster to approve the ERC20 token for.
+    /// @param subAccount_ The sub-account address associated with this LightAccount.
+    function initialize(address owner_, address erc20PaymentToken_, address paymasterAddress_, address subAccount_) external virtual initializer {
         _initialize(owner_);
         if(erc20PaymentToken_ != address(0)){
             IERC20(erc20PaymentToken_).approve(paymasterAddress_, type(uint256).max);
         }
+        subAccount = subAccount_;
     }
 
     /// @notice Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current
