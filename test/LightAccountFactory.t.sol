@@ -19,7 +19,7 @@ contract LightAccountFactoryTest is Test {
 
     function setUp() public {
         entryPoint = new EntryPoint();
-        factory = new LightAccountFactory(address(this), entryPoint);
+        factory = new LightAccountFactory(address(this), entryPoint,address(0), address(0));
     }
 
     function testReturnsAddressWhenAccountAlreadyExists() public {
@@ -99,7 +99,7 @@ contract LightAccountFactoryTest is Test {
         vm.expectRevert(
             abi.encodeWithSelector(BaseLightAccountFactory.InvalidEntryPoint.selector, (address(invalidEntryPoint)))
         );
-        new LightAccountFactory(address(this), invalidEntryPoint);
+        new LightAccountFactory(address(this), invalidEntryPoint,address(0),address(0));
     }
 
     /// @dev Receive funds from withdraw.
