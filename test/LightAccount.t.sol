@@ -36,7 +36,7 @@ contract LightAccountTest is Test {
     function setUp() public {
         eoaAddress = vm.addr(EOA_PRIVATE_KEY);
         entryPoint = new EntryPoint();
-        LightAccountFactory factory = new LightAccountFactory(address(this), entryPoint);
+        LightAccountFactory factory = new LightAccountFactory(address(this), entryPoint,address(0), address(0));
         account = factory.createAccount(eoaAddress, 1);
         vm.deal(address(account), 1 << 128);
         lightSwitch = new LightSwitch();
@@ -212,14 +212,14 @@ contract LightAccountTest is Test {
     }
 
     function testInitialize() public {
-        LightAccountFactory factory = new LightAccountFactory(address(this), entryPoint);
+        LightAccountFactory factory = new LightAccountFactory(address(this), entryPoint,address(0), address(0));
         vm.expectEmit(true, false, false, false);
         emit Initialized(0);
         account = factory.createAccount(eoaAddress, 1);
     }
 
     function testCannotInitializeWithZeroOwner() public {
-        LightAccountFactory factory = new LightAccountFactory(address(this), entryPoint);
+        LightAccountFactory factory = new LightAccountFactory(address(this), entryPoint,address(0), address(0));
         vm.expectRevert(abi.encodeWithSelector(LightAccount.InvalidOwner.selector, (address(0))));
         account = factory.createAccount(address(0), 1);
     }
