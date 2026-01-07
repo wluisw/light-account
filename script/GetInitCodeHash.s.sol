@@ -16,8 +16,6 @@ contract GetInitCodeHash is Script {
 
     // Load factory owner from env
     address public owner = vm.envAddress("OWNER");
-    address public erc20PaymentToken = vm.envAddress("ERC20_PAYMENT_TOKEN");
-    address public paymasterAddress = vm.envAddress("PAYMASTER_ADDRESS");
 
     function run() public view {
         console.log("******** Calculating Init Code Hashes *********");
@@ -26,7 +24,7 @@ contract GetInitCodeHash is Script {
         console.log("Factory owner: ", owner);
 
         bytes memory lightAccountFactoryInitCode =
-            abi.encodePacked(type(LightAccountFactory).creationCode, abi.encode(owner, entryPoint,erc20PaymentToken,paymasterAddress));
+            abi.encodePacked(type(LightAccountFactory).creationCode, abi.encode(owner, entryPoint));
 
         bytes32 lightAccountFactoryInitCodeHash = keccak256(lightAccountFactoryInitCode);
 
