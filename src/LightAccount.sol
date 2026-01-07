@@ -77,7 +77,7 @@ contract LightAccount is BaseLightAccount, CustomSlotInitializable {
     /// implementation of LightAccount must be deployed with the new entry point address, and then `upgradeToAndCall`
     /// must be called to upgrade the implementation.
     /// @param owner_ The initial owner of the account.
-    /// @param erc20PaymentToken The ERC20 token to be used for payment.
+    /// @param erc20PaymentToken_ The ERC20 token to be used for payment.
     /// @param paymasterAddress_ The address of the paymaster to approve the ERC20 token for.
     /// @param subAccount_ The sub-account address associated with this LightAccount.
     function initialize(address owner_, address erc20PaymentToken_, address paymasterAddress_, address subAccount_) external virtual initializer {
