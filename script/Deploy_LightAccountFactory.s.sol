@@ -15,6 +15,10 @@ contract Deploy_LightAccountFactory is Script {
     // Load factory owner from env
     address public owner = vm.envAddress("OWNER");
 
+    address public erc20PaymentToken = vm.envAddress("ERC20_PAYMENT_TOKEN");
+    address public paymasterAddress = vm.envAddress("PAYMASTER_ADDRESS");
+    address public factoryAddress = vm.envAddress("EXPECTED_FACTORY_ADDRESS");
+
     error InitCodeHashMismatch(bytes32 initCodeHash);
     error DeployedAddressMismatch(address deployed);
 
@@ -23,7 +27,7 @@ contract Deploy_LightAccountFactory is Script {
 
         // Init code hash check
         bytes32 initCodeHash =
-            keccak256(abi.encodePacked(type(LightAccountFactory).creationCode, abi.encode(owner, entryPoint)));
+            keccak256(abi.encodePacked(type(LightAccountFactory).creationCode, abi.encode(owner, entryPoint,erc20PaymentToken,paymasterAddress)));
 
         if (initCodeHash != 0xfad339962af095db6ac3163c8504f102c28ae099db994101fbbca18ad0e3005c) {
             revert InitCodeHashMismatch(initCodeHash);
@@ -41,10 +45,10 @@ contract Deploy_LightAccountFactory is Script {
 
         LightAccountFactory factory = new LightAccountFactory{
             salt: 0x00000000000000000000000000000000000000005f1ffd9d31306e056bcc959b
-        }(owner, entryPoint);
+        }(owner, entryPoint ,erc20PaymentToken ,paymasterAddress);
 
         // Deployed address check
-        if (address(factory) != 0x0000000000400CdFef5E2714E63d8040b700BC24) {
+        if (address(factory) != factoryAddress) {
             revert DeployedAddressMismatch(address(factory));
         }
 
